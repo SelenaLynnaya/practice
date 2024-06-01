@@ -1,0 +1,144 @@
+\documentclass[12pt,a4paper]{scrartcl} 
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\begin{document}
+	\begin{titlepage}
+		\begin{center}
+			\large
+			МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ
+			
+			Федеральное государственное бюджетное образовательное учреждение высшего образования
+			
+			\textbf{АДЫГЕЙСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ}
+			\vspace{0.25cm}
+			
+			Инженерно-физический факультет
+			
+			Кафедра автоматизированных систем обработки информации и управления
+			\vfill
+
+			\vfill
+			
+			\textsc{Отчет по практике}\\[5mm]
+			
+			{\LARGE Программаная реализация \\\LARGE{ Генерация случайных паролей заданной
+длины и сложности.}}
+			\bigskip
+			
+			2 курс, группа 2ИВТ 
+		\end{center}
+		\vfill
+		
+		\newlength{\ML}
+		\settowidth{\ML}{«\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}}}
+		\hfill\begin{minipage}{0.5\textwidth}
+			Выполнила:\\
+			\underline{\hspace{\ML}} А.\,Н.~Лисова\\
+			«\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}} 2024 г.
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.5\textwidth}
+			Руководитель:\\
+			\underline{\hspace{\ML}} С.\,В.~Теплоухов\\
+			«\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}} 2024 г.
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Майкоп, 2024 г.
+		\end{center}
+	\end{titlepage}
+	
+% Содержание
+\section{Введение}
+\label{sec:intro}
+
+\subsection{Формулировка цели}
+Целью данной работы является написание программы для генерации случайных паролей заданной
+длины и сложности.
+
+\section{Ход работы}
+\subsection{Код выполненной программы}
+\begin{verbatim}
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+// Функция для генерации случайного пароля заданной длины и сложности
+string generatePassword(int length, bool includeUppercase, bool includeNumbers) 
+{
+    // Создаем строку для хранения символов пароля
+    string password = "";
+    string generatedPassword;
+    // Строки символов для различных компонент пароля
+    string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz"; 
+    string uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string numbers = "0123456789"; 
+    // Если включены заглавные буквы, добавляем их к списку символов
+    if (includeUppercase) 
+        password += uppercaseLetters; 
+    // Если включены цифры, добавляем их к списку символов
+    if (includeNumbers) 
+        password += numbers; 
+    // Добавляем оставшиеся символы (маленькие буквы) к списку символов
+    password += lowercaseLetters;
+    // Инициализируем генератор случайных чисел текущим временем
+    srand(time(0));
+    // Генерируем случайный пароль заданной длины
+    for (int i = 0; i < length; ++i) 
+    {
+        int randomIndex = rand() % password.length();
+        generatedPassword += password[randomIndex]; // Добавляем случайный 
+        символ к паролю
+    }
+    return generatedPassword;
+}
+int main() 
+{
+    setlocale(0, "");
+    // Длина пароля и настройки сложности
+    int length, choice;
+    bool includeUppercase;
+    bool includeNumbers;
+    string password;
+    // Генерация и вывод пароля
+    do 
+    {
+        cout << "Хотите сгенерировать новый пароль? (1 - да, 0 - нет): ";
+        cin >> choice;
+        switch (choice) 
+        {
+        case 1:
+            cout << "Введите длину пароля: ";
+            cin >> length;
+            cout << "Включить заглавные буквы? (1 - да, 0 - нет): ";
+            cin >> includeUppercase;
+            cout << "Включить цифры? (1 - да, 0 - нет): ";
+            cin >> includeNumbers;
+            password = generatePassword(length, includeUppercase, includeNumbers);
+            cout << "Сгенерированный пароль: " << password << endl;
+            break;
+        case 0:
+            cout << "Выход." << endl;
+            break;
+        default:
+            cout << "Некорректный ввод. Повторите выбор." << endl;
+        }
+    } while (choice != 0);
+    return 0;
+}
+\end{verbatim}
+\begin{figure}[h]
+    \centering
+	\includegraphics[width=1\textwidth]{possword.jpg}
+	\caption{Результат работы}\label{fig:par}
+\end{figure}
+
+\end{document}
